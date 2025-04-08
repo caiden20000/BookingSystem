@@ -145,23 +145,23 @@ body {
 }
 
 .bg-red {
-  background-color: rgb(238, 144, 144);
+  background-color: rgb(238, 144, 144) !important;
 }
 
 .bg-green {
-  background-color: rgb(147, 238, 144);
+  background-color: rgb(147, 238, 144) !important;
 }
 
 .bg-yellow {
-  background-color: rgb(236, 209, 133);
+  background-color: rgb(236, 209, 133) !important;
 }
 
 .bg-blue {
-  background-color: rgb(144, 169, 238);
+  background-color: rgb(144, 169, 238) !important;
 }
 
 .bg-gray {
-  background-color: rgb(182, 182, 182);
+  background-color: rgb(182, 182, 182) !important;
 }
 
 .bold {
