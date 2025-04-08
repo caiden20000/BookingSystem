@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Booking - Error</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="global-styles.css"  th:href="@{/global-styles.css}"/>
+</head>
+
+<body>
+    <div class="main-grid">
+        <div class="header">
+            <div class="header-center flex-row flex-center">
+                <header class="flex-row a-center">
+                    <h2 class="title fill">Error</h2>
+                </header>
+            </div>
+        </div>
+        <div class="center flex-col flex-center">
+            <main>
+                <h2 style="text-align: center" th:text="${errorTitle}">404</h2>
+                <p style="text-align: center; width: min(90%, 500px); margin: auto" th:text="${errorDescription}">
+                    We've encountered an unexpected error! Please contact us and describe what  issue so we can fix it!
+                </p>
+            </main>
+        </div>
+        <div class="footer">
+            <div class="footer-center flex-row flex-center">
+                <footer>
+                    © 2025 MyChef<br />
+                    All Bites Reserved™
+                </footer>
+            </div>
+        </div>
+        <div class="right-side"></div>
+        <div class="left-side"></div>
+    </div>
+</body>
+
+</html>

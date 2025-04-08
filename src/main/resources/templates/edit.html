@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+
+<html lang="en"> <!-- Not yet Thymeleafed! -->
+  <head>
+    <title>Booking - Edit</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="global-styles.css" />
+    <link rel="stylesheet" href="view-styles.css" />
+    <link rel="stylesheet" href="edit-styles.css" />
+    <script type="module" src="script.js"></script>
+  </head>
+  <body>
+    <div class="main-grid">
+      <div class="header">
+        <div class="header-center flex-row flex-center">
+          <header class="a-center">
+            <h2 class="title fill">Edit Booking</h2>
+            <button class="bg-red">
+              <img src="back-arrow.svg" alt="Back arrow" width="20px" height="20px" /> Discard changes
+            </button>
+          </header>
+        </div>
+      </div>
+      <div class="center flex-col flex-center">
+        <main>
+          <div class="view-grid">
+            <div class="party-info-area">
+              <div class="nobreak-contents"><span class="bold">Chef:</span> <span>Jack Bachs</span></div>
+              <div class="nobreak-contents"><span class="bold">Employer:</span> <span>Wallace Martin</span></div>
+            </div>
+            <div class="payment-info-area flex-col flex-center">
+              <div class="table-wrapper">
+                <div class="table-header">
+                  <span class="bold label">Payment</span>
+                  <span class="sublabel">(USD)</span>
+                </div>
+                <table class="details">
+                  <tr>
+                    <td><label for="signing-pay">Signing pay</label></td>
+                    <td><input type="text" placeholder="$..." name="signing-pay" id="signing-pay" value="250" /></td>
+                  </tr>
+                  <tr>
+                    <td><label for="hourly-rate">Hourly Rate</label></td>
+                    <td><input type="text" placeholder="$..." name="hourly-rate" id="hourly-rate" value="26.00" /></td>
+                  </tr>
+                  <tr>
+                    <td><label for="completion-pay">Completion pay</label></td>
+                    <td>
+                      <input type="text" placeholder="$..." name="completion-pay" id="completion-pay" value="500" />
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div class="schedule-info-area flex-col flex-center">
+              <div class="table-wrapper">
+                <div class="table-header">
+                  <span class="bold label">Working Schedule</span>
+                </div>
+                <table class="details">
+                  <tr>
+                    <td><input type="text" placeholder="MM/DD/YYYY" name="date" value="04/05/2025" /></td>
+                    <td>
+                      <input type="text" placeholder="Start time - End time" name="times" value="06:00 AM - 04:00 PM" />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="2" class="add-cell">
+                      <button class="add-button"><img src="add-icon.svg" alt="Add icon" class="add-icon" /></button>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div class="form-buttons-area">
+              <button class="bold bg-red">Discard changes</button>
+              <button class="bold bg-green">Confirm changes<br />(requires acceptance)</button>
+            </div>
+          </div>
+        </main>
+      </div>
+      <div class="footer">
+        <div class="footer-center flex-row flex-center">
+          <footer>
+            © 2025 MyChef<br />
+            All Bites Reserved™
+          </footer>
+        </div>
+      </div>
+      <div class="right-side"></div>
+      <div class="left-side"></div>
+    </div>
+  </body>
+</html>

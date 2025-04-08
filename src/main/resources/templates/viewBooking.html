@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>View Booking</title>
+</head>
+<body>
+    <h1>View booking:</h1>
+    <div class="booking">
+        <p>Booking ID: <span th:text="${booking.bookingId}">Placeholder</span></p>
+        <p>Employer ID: <span th:text="${booking.employerId}">Placeholder</span></p>
+        <p>Chef ID: <span th:text="${booking.chefId}">Placeholder</span></p>
+        <p>
+            <h3>Schedule</h3>
+            <span th:text="|${booking.schedule.size()} days:|"></span>
+            <div th:each="time : ${booking.schedule}">
+                <span th:text="${#temporals.format(time.startTime, 'MM-dd HH:mm', 'America/New_York')}"></span> to <span th:text="${#temporals.format(time.endTime, 'HH:mm', 'America/New_York')}"></span>
+            </div>
+        </p>
+        <p><h3>Payment</h3>
+            <p>Sign On Pay: $<span th:text="${booking.paymentAgreement.signOnPay}"></span></p>
+            <p>Hourly Pay: $<span th:text="${booking.paymentAgreement.hourlyPay}"></span></p>
+            <p>Completion Pay: $<span th:text="${booking.paymentAgreement.completionPay}"></span></p>
+        </p>
+    </div>
+</body>
+</html>
