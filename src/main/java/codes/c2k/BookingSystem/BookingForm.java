@@ -38,9 +38,9 @@ public class BookingForm {
 
     public Booking applyToBooking(Booking booking) throws DateTimeParseException {
         booking.getPaymentAgreement().setSignOnPay(signOnPay).setHourlyPay(hourlyPay).setCompletionPay(completionPay);
-        List<BookingTime> newSchedule = new ArrayList<>();
+        booking.getSchedule().clear();
         for (BookingTimeForm timeForm : schedule) {
-            newSchedule.add(timeForm.toBookingTime());
+            booking.getSchedule().add(timeForm.toBookingTime());
         }
 
         return booking;

@@ -4,11 +4,8 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-
-import org.springframework.beans.factory.annotation.Value;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -18,6 +15,7 @@ import lombok.experimental.Accessors;
 @Getter @Setter
 public class BookingTimeForm {
     String date;
+    String times;
     String startTime;
     String endTime;
 
@@ -34,12 +32,17 @@ public class BookingTimeForm {
         newForm.setDate(startTime.format(dateFormat));
         newForm.setStartTime(startTime.format(timeFormat));
         newForm.setEndTime(endTime.format(timeFormat));
+        newForm.setTimes(startTime.format(timeFormat) + " - " + endTime.format(timeFormat));
 
         return newForm;
     }
 
     public BookingTime toBookingTime() throws DateTimeParseException {
         LocalDate newLocalDate = LocalDate.parse(date, dateFormat);
+        String[] split = times.split(" - ");
+        startTime = split[0];
+        endTime = split[1];
+        
         LocalTime newLocalStartTime = LocalTime.parse(startTime, timeFormat);
         LocalTime newLocalEndTime = LocalTime.parse(endTime, timeFormat);
 

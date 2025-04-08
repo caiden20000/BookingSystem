@@ -1,5 +1,6 @@
 package codes.c2k.BookingSystem;
 
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,7 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
@@ -71,7 +71,10 @@ public class BookingController {
     public String editBooking(@RequestParam String bookingId, Model model) {
         Optional<Booking> result = repository.findByBookingId(bookingId);
         if (result.isPresent()) {
-            model.addAttribute("booking", result.get());
+            Booking booking = result.get();
+            BookingForm bookingForm = BookingForm.fromBooking(booking);
+            model.addAttribute("booking", booking);
+            model.addAttribute("bookingForm", bookingForm);
             return "edit";
         } else {
             model.addAttribute("errorTitle", "Booking not Found");
@@ -88,8 +91,26 @@ public class BookingController {
 
     // }
 
-    // @PostMapping("/save")
-    // public String saveBooking(@ModelAttribute("booking") Booking booking, Model model) {
-
-    // }
+    @PostMapping("/save/{bookingId}")
+    public String saveBooking(@PathVariable(value = "bookingId") String bookingId, @ModelAttribute("bookingForm") BookingForm bookingForm, Model model) {
+        Optional<Booking> result = repository.findByBookingId(bookingId);
+        if (result.isPresent()) {
+            try {
+                Booking booking = result.get();
+                bookingForm.applyToBooking(booking);
+                service.saveBooking(booking);
+                return "redirect:/view/" + bookingId;
+            } catch (DateTimeParseException exception) {
+                model.addAttribute("errorTitle", "Incorrectly formatted");
+                model.addAttribute("errorDescription",
+                        "The submitted information was incorrectly formatted. This usually happens because the date or times were not in the proper format. Dates should be 'MM/DD/YYYY', and times should be 'HH:MM AA - HH:MM AA'.");
+                return "404";
+            } 
+        } else {
+            model.addAttribute("errorTitle", "Booking not Found");
+            model.addAttribute("errorDescription",
+                    "We're sorry, but the URL provided doesn't link to a valid Booking in our database. Perhaps the URL was entered incorrectly?");
+            return "404";
+        }
+    }
 }

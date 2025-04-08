@@ -34,10 +34,13 @@ Make sure to use `<html xmlns:th="http://www.thymeleaf.org">` as the HTML tag, o
 - [x] Coordinate JPA and Thymeleaf to dynamically pull data from the database and display it on a page
 - [x] Templatize the view page
 - [x] Templatize the list page
-- [ ] Templatize the edit page
-- [ ] Create a BookingForm to map submitted values to model values
-- [ ] Make the edit page able to post and modify data
-- [ ] Make the edit page edit a booking if specified
+- [x] Templatize the edit page
+- [x] Create a BookingForm to map submitted values to model values
+- [x] Make the edit page able to post and modify data
+- [x] Make the edit page edit a booking if specified
+- [ ] Change buttons for links where they should be
+- [ ] Store a ref in the page queries so you can always get back to where you came from
+- [ ] Move that ref into cookies
 - [ ] Make the edit page create a booking if specified
 - [ ] Gray buttons out on the view page when not applicable
 - [x] Set up the repository
