@@ -21,8 +21,24 @@ Ignore the Java parts, because it's different then what we're working with. We'r
 Actually this one might be better: https://www.thymeleaf.org/doc/tutorials/3.0/thymeleafspring.html  
 Make sure to use `<html xmlns:th="http://www.thymeleaf.org">` as the HTML tag, otherwise it might not work? I'm not sure.
 
+## BookingSystem info
 
----
+Buttons that should be visible depending on status and identity:  
+
+Status           | Employer      | Chef          |
+-----------------|---------------|---------------|
+PENDING_CHEF     |Cancel         |Accept, Reject |
+PENDING_EMPLOYER |Accept, Reject |Cancel         |
+ACCEPTED         |Cancel, Modify |Cancel         |
+REJECTED         |N/A            |N/A            |
+CANCELLED        |N/A            |N/A            |
+COMPLETED        |N/A            |N/A            |
+
+
+Professor says the API service needs to be a separate Java Project. We'll have to figure out how to connect to the same database from 2 different instances, and whether we want the BookingSystem to use the microservice for data or not.
+
+
+
 
 ## TODO list
 
@@ -48,5 +64,6 @@ Make sure to use `<html xmlns:th="http://www.thymeleaf.org">` as the HTML tag, o
 - [ ] Change buttons based on who's viewing it (Chef can accept depending on status)
 - [ ] Create an Employer name resolver service
 - [ ] Create a Chef name resolver service
-- [ ] Integrate the name resolvers into the controller
-- [ ] Create the API "Microservice"
+- [ ] Integrate the name resolvers into the controller  
+
+- [ ] Begin working on the API "Microservice" Project
