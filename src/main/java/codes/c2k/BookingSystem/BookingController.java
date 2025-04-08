@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
@@ -53,5 +55,24 @@ public class BookingController {
             model.addAttribute("errorDescription", "The URL parameters are invalid, so we can't provide proper results. Perhaps the URL was typed incorrectly? If you followed a link here, you should let the link-owner know their link is broken.");
             return "404";
         }
+    }
+
+    // Edit a booking based on the ID of the booking.
+    // If the booking doesn't exist, return the 404 page.
+    @GetMapping("/edit")
+    public String editBooking(@RequestParam String id, Model model) {
+
+    }
+
+    // Create a booking based on the employer and chef IDs
+    // If the employer or chef IDs fail validation, return the 404 page.
+    @GetMapping("/create")
+    public String createBooking(@RequestParam String employerId, @RequestParam String chefId, Model model) {
+
+    }
+
+    @PostMapping("/save")
+    public String saveBooking(@ModelAttribute("booking") Booking booking, Model model) {
+
     }
 }
