@@ -2,14 +2,15 @@
 
 ## hello
 
-We are working from Spring Initializr.
-I am currently using https://github.com/SWE443/Demo/tree/master/demo as a guide.  
-On BookingSystem-v2 I have:
+To start the project, I used [Spring Initializr](https://start.spring.io/index.html).
+Using https://github.com/SWE443/Demo/tree/master/demo as a guide, I determined the following dependencies to add in Spring Initializr:
 - Lombok  
 - Spring Web  
 - Thymeleaf  
 - H2 Database  
 - Spring Data JPA 
+In addition, I chose Java 21. This should be a good starting point for the project.  
+Note that Lombok is absent from the demo project, but I include it because it makes getters and setters fast to implement.
 
 ---
 
