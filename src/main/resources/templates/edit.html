@@ -16,9 +16,10 @@
         <div class="header-center flex-row flex-center">
           <header class="a-center">
             <h2 class="title fill">Edit Booking</h2>
-            <button class="bg-red">
-              <img src="back-arrow.svg" alt="Back arrow" width="20px" height="20px" /> Discard changes
-            </button>
+            <a class="a-button bg-red" href="/view" th:href="@{/view/{id}(id = ${booking.bookingId})}">
+              <img src="/back-arrow.svg" th:src="@{/back-arrow.svg}" alt="Back arrow" width="20px" height="20px" />
+              Discard changes
+            </a>
           </header>
         </div>
       </div>
@@ -112,7 +113,9 @@
                 </div>
               </div>
               <div class="form-buttons-area">
-                <button class="bold bg-red" type="button">Discard changes</button>
+                <a class="a-button bold bg-red" href="/view" th:href="@{/view/{id}(id = ${booking.bookingId})}"
+                  >Discard changes</a
+                >
                 <button class="bold bg-green" type="button" id="submit-button">
                   Confirm changes<br />(requires acceptance)
                 </button>

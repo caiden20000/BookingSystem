@@ -4,14 +4,6 @@
     <title>Booking - View</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <link rel="stylesheet" href="/global-styles.css" th:href="@{/global-styles.css}"/>
-    <link rel="stylesheet" href="/view-styles.css" th:href="@{/view-styles.css}"/>
-    <!-- <script type="module" src="script.js"></script> -->a<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <title>Booking - View</title>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
     <link rel="stylesheet" href="/global-styles.css" th:href="@{/global-styles.css}" />
     <link rel="stylesheet" href="/view-styles.css" th:href="@{/view-styles.css}" />
     <!-- <script type="module" src="script.js"></script> -->
@@ -87,85 +79,9 @@
               <a
                 class="a-button bold edit-button"
                 href="/edit"
-                th:href="@{/edit?bookingId={id}(id = booking.bookingId)}"
+                th:href="@{/edit?bookingId={id}(id = ${booking.bookingId})}"
                 >Edit Booking</a
               >
-            </div>
-          </div>
-        </main>
-      </div>
-      <div class="footer">
-        <div class="footer-center flex-row flex-center">
-          <footer>
-            © 2025 MyChef<br />
-            All Bites Reserved™
-          </footer>
-        </div>
-      </div>
-      <div class="right-side"></div>
-      <div class="left-side"></div>
-    </div>
-  </body>
-</html>
-
-  </head>
-  <body>
-    <div class="main-grid">
-      <div class="header">
-        <div class="header-center flex-row flex-center">
-          <header class="flex-row a-center">
-            <button><img src="/back-arrow.svg" th:src="@{/back-arrow.svg}" alt="Back arrow" width="20px" height="20px" /> Back to Profile</button>
-            <h2 class="title fill">View Booking</h2>
-          </header>
-        </div>
-      </div>
-      <div class="center flex-col flex-center">
-        <main>
-          <div class="view-grid">
-            <div class="status-color-area"><div class="status-color" th:classappend="${booking.statusCssColorClass}"></div></div>
-            <div class="party-info-area">
-              <div><span class="bold">Status:</span> <span th:text="${booking.status}">Unknown</span></div>
-              <div><span class="bold">Chef:</span> <span class="nobreak" th:text="${booking.chefId}">Unknown</span></div>
-              <div><span class="bold">Employer:</span> <span class="nobreak" th:text="${booking.employerId}">Unknown</span></div>
-            </div>
-            <div class="payment-info-area flex-col flex-center">
-              <div class="table-wrapper">
-                <div class="table-header">
-                  <span class="bold label">Payment</span>
-                  <span class="sublabel">(USD)</span>
-                </div>
-                <table class="details">
-                  <tr>
-                    <td class="nobreak">Signing pay</td>
-                    <td th:text="${booking.paymentAgreement.signOnPay}">Unknown</td>
-                  </tr>
-                  <tr>
-                    <td class="nobreak">Hourly rate</td>
-                    <td th:text="${booking.paymentAgreement.hourlyPay}">Unknown</td>
-                  </tr>
-                  <tr>
-                    <td class="nobreak">Completion pay</td>
-                    <td th:text="${booking.paymentAgreement.completionPay}">Unknown</td>
-                  </tr>
-                </table>
-              </div>
-            </div>
-            <div class="schedule-info-area flex-col flex-center">
-              <div class="table-wrapper">
-                <div class="table-header">
-                  <span class="bold label nobreak">Working Schedule</span>
-                </div>
-                <table class="details">
-                  <tr th:each="time : ${booking.schedule}">
-                    <td th:text="${#temporals.format(time.startTime, 'MM/dd/yyyy', 'America/New_York')}">11/18/2011</td>
-                    <td class="nobreak"><span th:text="${#temporals.format(time.startTime, 'hh:mm a', 'America/New_York')}"></span> - <span th:text="${#temporals.format(time.endTime, 'hh:mm a', 'America/New_York')}"></span></td>
-                  </tr>
-                </table>
-              </div>
-            </div>
-            <div class="form-buttons-area">
-              <button class="bold cancel-button">Cancel Booking</button>
-              <button class="bold edit-button">Edit Booking</button>
             </div>
           </div>
         </main>

@@ -7,11 +7,15 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 public class BookingController {
@@ -24,12 +28,19 @@ public class BookingController {
 
     // "/view" is the request URL, which is mapped to the root url, for example: www.booking.com/view
     @GetMapping("/view/{bookingId}") // vvvvvvv This variable is from the path we specified in GetMapping
-    public String viewBooking(@PathVariable(value = "bookingId") String bookingId, Model model) {
+    public String viewBooking(@PathVariable(value = "bookingId") String bookingId, Model model, @CookieValue(value = "refId", defaultValue = "ERR") String refId, @CookieValue(value = "refType", defaultValue = "ERR") String refType) {
         Optional<Booking> result = repository.findByBookingId(bookingId);
         if (result.isPresent()) {
             // Here, we're adding a variable for the thymeleaf template to use. ${booking}
             // will refer to result.get()'s output.
             model.addAttribute("booking", result.get());
+
+            // These are cookie attributes we got from @CookieValue in the function signature.
+            // They refer to the id and idType from the list view. We fill in the link back to
+            // the list page with these.
+            model.addAttribute("refId", refId);
+            model.addAttribute("refType", refType);
+
             // Returning a string from a GetMapping function is returning the templated HTML
             // with that name.
             // So here, we're returning view.html and filling it in with everything passed
@@ -48,10 +59,18 @@ public class BookingController {
     }
 
     @GetMapping("/list")
-    public String viewBooking(@RequestParam String id, @RequestParam String idType, Model model) {
+    public String viewBooking(@RequestParam String id, @RequestParam String idType, Model model, HttpServletResponse response) {
         if (idType.equalsIgnoreCase("employer")) {
             List<Booking> results = repository.findByEmployerId(id);
             model.addAttribute("bookingList", results);
+
+            Cookie refIdCookie = new Cookie("refId", id);
+            Cookie refTypeCookie = new Cookie("refType", idType);
+            refIdCookie.setPath("/");
+            refTypeCookie.setPath("/");
+            response.addCookie(refIdCookie);
+            response.addCookie(refTypeCookie);
+
             return "list";
         } else if (idType.equalsIgnoreCase("chef")) {
             List<Booking> results = repository.findByChefId(id);

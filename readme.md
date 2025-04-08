@@ -38,10 +38,15 @@ Make sure to use `<html xmlns:th="http://www.thymeleaf.org">` as the HTML tag, o
 - [x] Create a BookingForm to map submitted values to model values
 - [x] Make the edit page able to post and modify data
 - [x] Make the edit page edit a booking if specified
-- [ ] Change buttons for links where they should be
-- [ ] Store a ref in the page queries so you can always get back to where you came from
-- [ ] Move that ref into cookies
+- [x] Change buttons for links where they should be
+- [x] Store a ref in the page queries so you can always get back to where you came from
+- [x] Move that ref into cookies
+- [x] Set up the repository
 - [ ] Make the edit page create a booking if specified
 - [ ] Gray buttons out on the view page when not applicable
-- [x] Set up the repository
+- [ ] Make editing not possible depending on the status
+- [ ] Change buttons based on who's viewing it (Chef can accept depending on status)
+- [ ] Create an Employer name resolver service
+- [ ] Create a Chef name resolver service
+- [ ] Integrate the name resolvers into the controller
 - [ ] Create the API "Microservice"
