@@ -26,7 +26,7 @@ public class BookingSystemApplication {
 	@Bean
 	public CommandLineRunner demo(BookingRepository repository) {
 		return (args) -> {
-			log.info("Initialized :)");
+			log.info("Adding example bookings...");
 			// // check new service works before by adding a record to see if it comes up
 			// Booking booking1 = new Booking();
 			// long id = 12;
@@ -315,6 +315,7 @@ public class BookingSystemApplication {
 
 			service.saveBooking(booking12);
 
+			log.info("Example bookings added!");
 		};
 	}
 }

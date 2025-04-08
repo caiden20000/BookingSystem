@@ -25,77 +25,79 @@
     </div>
     <div class="center flex-col flex-center">
       <main>
-        <div class="view-grid">
-          <div class="party-info-area">
-            <div class="nobreak-contents"><span class="bold">Chef:</span> <span>Jack Bachs</span></div>
-            <div class="nobreak-contents"><span class="bold">Employer:</span> <span>Wallace Martin</span></div>
-          </div>
-          <div class="payment-info-area flex-col flex-center">
-            <div class="table-wrapper">
-              <div class="table-header">
-                <span class="bold label">Payment</span>
-                <span class="sublabel">(USD)</span>
-              </div>
-              <table class="details">
-                <tr>
-                  <td><label for="signing-pay">Signing pay</label></td>
-                  <td><input type="text" placeholder="$..." name="signing-pay" id="signing-pay" value="250" /></td>
-                </tr>
-                <tr>
-                  <td><label for="hourly-rate">Hourly Rate</label></td>
-                  <td><input type="text" placeholder="$..." name="hourly-rate" id="hourly-rate" value="26.00" /></td>
-                </tr>
-                <tr>
-                  <td><label for="completion-pay">Completion pay</label></td>
-                  <td>
-                    <input type="text" placeholder="$..." name="completion-pay" id="completion-pay" value="500" />
-                  </td>
-                </tr>
-              </table>
+        <form action="/edit" th:action="@{/edit}" th:object="${booking}" method="post" class="main-form">
+          <div class="view-grid">
+            <div class="party-info-area">
+              <div class="nobreak-contents"><span class="bold">Chef:</span> <span th:text="*{chefId}">Jack Bachs</span></div>
+              <div class="nobreak-contents"><span class="bold">Employer:</span> <span th:text="*{employerId}">Wallace Martin</span></div>
             </div>
-          </div>
-          <div class="schedule-info-area flex-col flex-center">
-            <div class="table-wrapper">
-              <div class="table-header">
-                <span class="bold label">Working Schedule</span>
+            <div class="payment-info-area flex-col flex-center">
+              <div class="table-wrapper">
+                <div class="table-header">
+                  <span class="bold label">Payment</span>
+                  <span class="sublabel">(USD)</span>
+                </div>
+                <table class="details">
+                  <tr>
+                    <td><label for="signing-pay">Signing pay</label></td>
+                    <td><input id="signing-pay" type="text" placeholder="$..." th:field="*{signOnPay}" /></td>
+                  </tr>
+                  <tr>
+                    <td><label for="hourly-rate">Hourly Rate</label></td>
+                    <td><input id="hourly-rate" type="text" placeholder="$..." th:field="*{hourlyPay}" /></td>
+                  </tr>
+                  <tr>
+                    <td><label for="completion-pay">Completion pay</label></td>
+                    <td>
+                      <input id="completion-pay" type="text" placeholder="$..." th:field="*{completionPay}" />
+                    </td>
+                  </tr>
+                </table>
               </div>
-              <table class="details" id="schedule-table">
-                <tr>
-                  <td><input type="text" placeholder="MM/DD/YYYY" name="date" value="04/05/2025" /></td>
-                  <td>
-                    <input type="text" placeholder="Start time - End time" name="times" value="06:00 AM - 04:00 PM" />
-                  </td>
-                  <td>
-                    <button class="delete-button">-</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td colspan="2" class="add-cell">
-                    <button class="add-button" id="add-row">
-                      <img src="/add-icon.svg" th:src="@{/add-icon.svg}" alt="Add icon" class="add-icon" />
-                    </button>
-                  </td>
-                </tr>
-              </table>
+            </div>
+            <div class="schedule-info-area flex-col flex-center">
+              <div class="table-wrapper">
+                <div class="table-header">
+                  <span class="bold label">Working Schedule</span>
+                </div>
+                <table class="details" id="schedule-table">
+                  <tr>
+                    <td><input type="text" placeholder="MM/DD/YYYY" name="date" value="04/05/2025" /></td>
+                    <td>
+                      <input type="text" placeholder="Start time - End time" name="times" value="06:00 AM - 04:00 PM" />
+                    </td>
+                    <td>
+                      <button class="delete-button">-</button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="2" class="add-cell">
+                      <button class="add-button" id="add-row">
+                        <img src="/add-icon.svg" th:src="@{/add-icon.svg}" alt="Add icon" class="add-icon" />
+                      </button>
+                    </td>
+                  </tr>
+                </table>
 
-              <template id="empty-row-template">
-                <tr>
-                  <td><input type="text" placeholder="MM/DD/YYYY" name="date" /></td>
-                  <td>
-                    <input type="text" placeholder="Start time - End time" name="times" />
-                  </td>
-                  <td>
-                    <button class="delete-button">-</button>
-                  </td>
-                </tr>
-              </template>
+                <template id="empty-row-template">
+                  <tr>
+                    <td><input type="text" placeholder="MM/DD/YYYY" name="date" /></td>
+                    <td>
+                      <input type="text" placeholder="Start time - End time" name="times" />
+                    </td>
+                    <td>
+                      <button class="delete-button">-</button>
+                    </td>
+                  </tr>
+                </template>
+              </div>
+            </div>
+            <div class="form-buttons-area">
+              <button class="bold bg-red">Discard changes</button>
+              <button class="bold bg-green">Confirm changes<br />(requires acceptance)</button>
             </div>
           </div>
-          <div class="form-buttons-area">
-            <button class="bold bg-red">Discard changes</button>
-            <button class="bold bg-green">Confirm changes<br />(requires acceptance)</button>
-          </div>
-        </div>
+        </form>
       </main>
     </div>
     <div class="footer">

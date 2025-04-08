@@ -18,6 +18,7 @@ Note that Lombok is absent from the demo project, but I include it because it ma
 Thymeleaf is a little confusing.  
 Use this as a guide: https://www.thymeleaf.org/doc/tutorials/3.1/usingthymeleaf.html  
 Ignore the Java parts, because it's different then what we're working with. We're using Spring Web, which is different.  
+Actually this one might be better: https://www.thymeleaf.org/doc/tutorials/3.0/thymeleafspring.html  
 Make sure to use `<html xmlns:th="http://www.thymeleaf.org">` as the HTML tag, otherwise it might not work? I'm not sure.
 
 
@@ -34,8 +35,10 @@ Make sure to use `<html xmlns:th="http://www.thymeleaf.org">` as the HTML tag, o
 - [x] Templatize the view page
 - [x] Templatize the list page
 - [ ] Templatize the edit page
+- [ ] Create a BookingForm to map submitted values to model values
 - [ ] Make the edit page able to post and modify data
 - [ ] Make the edit page edit a booking if specified
 - [ ] Make the edit page create a booking if specified
 - [ ] Gray buttons out on the view page when not applicable
-- [ ] Set up the repository
+- [x] Set up the repository
+- [ ] Create the API "Microservice"

@@ -12,4 +12,6 @@ public class PaymentAgreement {
     float signOnPay;
     float hourlyPay;
     float completionPay;
+
+    public PaymentAgreement() {}
 }

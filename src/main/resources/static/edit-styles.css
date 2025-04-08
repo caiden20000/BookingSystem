@@ -39,3 +39,10 @@ td.add-cell::after {
   height: 22px;
   border-radius: 2px;
 }
+
+.main-form {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
