@@ -15,8 +15,9 @@
       <div class="header">
         <div class="header-center flex-row flex-center">
           <header class="a-center">
-            <h2 class="title fill">Edit Booking</h2>
-            <a class="a-button bg-red" href="/view" th:href="@{/view/{id}(id = ${booking.bookingId})}">
+            <h2 th:unless="${createMode}" class="title fill">Edit Booking</h2>
+            <h2 th:if="${createMode}" class="title fill">Create Booking</h2>
+            <a th:unless="${createMode}" class="a-button bg-red" href="/view" th:href="@{/view/{id}(id = ${booking?.bookingId})}">
               <img src="/back-arrow.svg" th:src="@{/back-arrow.svg}" alt="Back arrow" width="20px" height="20px" />
               Discard changes
             </a>
@@ -27,7 +28,7 @@
         <main>
           <form
             action="/edit"
-            th:action="@{/save/{id}(id=${booking.bookingId})}"
+            th:action="${postUrl}"
             th:object="${bookingForm}"
             method="post"
             class="main-form"
@@ -36,10 +37,12 @@
             <div class="view-grid">
               <div class="party-info-area">
                 <div class="nobreak-contents">
-                  <span class="bold">Chef:</span> <span th:text="${booking.chefId}">Unknown</span>
+                  <span class="bold">Chef:</span> <span th:text="*{chefId}">Unknown</span>
+                  <input type="hidden" th:field="*{chefId}">
                 </div>
                 <div class="nobreak-contents">
-                  <span class="bold">Employer:</span> <span th:text="${booking.employerId}">Unknown</span>
+                  <span class="bold">Employer:</span> <span th:text="*{employerId}">Unknown</span>
+                  <input type="hidden" th:field="*{employerId}">
                 </div>
               </div>
               <div class="payment-info-area flex-col flex-center">
@@ -113,11 +116,12 @@
                 </div>
               </div>
               <div class="form-buttons-area">
-                <a class="a-button bold bg-red" href="/view" th:href="@{/view/{id}(id = ${booking.bookingId})}"
+                <a th:unless="${createMode}" class="a-button bold bg-red" href="/view" th:href="@{/view/{id}(id = ${booking?.bookingId})}"
                   >Discard changes</a
                 >
                 <button class="bold bg-green" type="button" id="submit-button">
-                  Confirm changes<br />(requires acceptance)
+                  <span th:unless="${createMode}">Confirm changes<br />(requires acceptance)</span>
+                  <span th:if="${createMode}">Create booking request</span>
                 </button>
               </div>
             </div>

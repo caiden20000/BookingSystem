@@ -56,4 +56,6 @@ public class Booking {
         if (status == BookingStatus.COMPLETED) return "bg-gray";
         return "bg-gray";
     }
+    
+    
 }

@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 
 @Controller
+@Slf4j
 public class BookingController {
 
     @Autowired
@@ -57,40 +59,6 @@ public class BookingController {
             return "404";
         }
     }
-    
-    // This is to get list parameters from cookie, which is not necessary but might be nice.
-    // @GetMapping("/list")
-    // public String viewBooking(Model model, HttpServletResponse response, @CookieValue(value = "refId", defaultValue = "ERR") String refId, @CookieValue(value = "refType", defaultValue = "ERR") String refType) {
-    //     if (refType.equalsIgnoreCase("ERR") || refType.equalsIgnoreCase("ERR")) {
-    //         model.addAttribute("errorTitle", "Invalid parameters");
-    //         model.addAttribute("errorDescription",
-    //                 "The URL parameters are invalid, so we can't provide proper results. Perhaps the URL was typed incorrectly? If you followed a link here, you should let the link-owner know their link is broken.");
-    //         return "404";
-    //     }
-        
-    //     if (refType.equalsIgnoreCase("employer")) {
-    //         List<Booking> results = repository.findByEmployerId(refId);
-    //         model.addAttribute("bookingList", results);
-
-    //         Cookie refIdCookie = new Cookie("refId", refId);
-    //         Cookie refTypeCookie = new Cookie("refType", refType);
-    //         refIdCookie.setPath("/");
-    //         refTypeCookie.setPath("/");
-    //         response.addCookie(refIdCookie);
-    //         response.addCookie(refTypeCookie);
-
-    //         return "list";
-    //     } else if (refType.equalsIgnoreCase("chef")) {
-    //         List<Booking> results = repository.findByChefId(refId);
-    //         model.addAttribute("bookingList", results);
-    //         return "list";
-    //     } else {
-    //         model.addAttribute("errorTitle", "Invalid parameters");
-    //         model.addAttribute("errorDescription",
-    //                 "The URL parameters are invalid, so we can't provide proper results. Perhaps the URL was typed incorrectly? If you followed a link here, you should let the link-owner know their link is broken.");
-    //         return "404";
-    //     }
-    // }
 
     @GetMapping("/list")
     public String viewBooking(@RequestParam String id, @RequestParam String idType, Model model, HttpServletResponse response) {
@@ -128,6 +96,8 @@ public class BookingController {
             BookingForm bookingForm = BookingForm.fromBooking(booking);
             model.addAttribute("booking", booking);
             model.addAttribute("bookingForm", bookingForm);
+            model.addAttribute("postUrl", "/save/" + bookingId);
+            model.addAttribute("createMode", false);
             return "edit";
         } else {
             model.addAttribute("errorTitle", "Booking not Found");
@@ -136,13 +106,6 @@ public class BookingController {
             return "404";
         }
     }
-
-    // // Create a booking based on the employer and chef IDs
-    // // If the employer or chef IDs fail validation, return the 404 page.
-    // @GetMapping("/create")
-    // public String createBooking(@RequestParam String employerId, @RequestParam String chefId, Model model) {
-
-    // }
 
     @PostMapping("/save/{bookingId}")
     public String saveBooking(@PathVariable(value = "bookingId") String bookingId, @ModelAttribute("bookingForm") BookingForm bookingForm, Model model) {
@@ -166,4 +129,22 @@ public class BookingController {
             return "404";
         }
     }
+
+    // // Create a booking based on the employer and chef IDs
+    // // If the employer or chef IDs fail validation, return the 404 page.
+    @GetMapping("/create")
+    public String createBooking(@RequestParam String employerId, @RequestParam String chefId, Model model) {
+        
+        BookingForm bookingForm = BookingForm.emptyBookingForm(employerId, chefId);
+        model.addAttribute("bookingForm", bookingForm);
+        model.addAttribute("postUrl", "/create");
+        model.addAttribute("createMode", true);
+        return "edit";
+        
+    }
+
+    // @PostMapping("/create")
+    // public String saveCreateBooking() {
+
+    // }
 }
