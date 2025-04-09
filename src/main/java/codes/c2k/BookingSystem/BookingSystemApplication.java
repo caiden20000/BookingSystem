@@ -1,8 +1,10 @@
 package codes.c2k.BookingSystem;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.h2.tools.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.DependsOn;
 
 @SpringBootApplication
 public class BookingSystemApplication {
@@ -23,24 +26,17 @@ public class BookingSystemApplication {
 		SpringApplication.run(BookingSystemApplication.class, args);
 	}
 
+	@Bean(initMethod = "start", destroyMethod = "stop")
+	public Server inMemoryH2DatabaseaServer() throws SQLException {
+		log.info(">> Starting H2 Server...");
+		return Server.createTcpServer(
+		"-tcp", "-tcpAllowOthers", "-tcpPort", "9090");
+	}
+
 	@Bean
 	public CommandLineRunner demo(BookingRepository repository) {
 		return (args) -> {
 			log.info("Adding example bookings...");
-			// // check new service works before by adding a record to see if it comes up
-			// Booking booking1 = new Booking();
-			// long id = 12;
-			// booking1.setSid(id);
-			// booking1.setContent("Happy");
-			// service.saveBooking(booking1);
-			// // Retrieve new booking
-			// List<Booking> shouldBeBooking1 = repository.findByContent("Happy");
-			// log.info("Booking list length: " + shouldBeBooking1.size());
-			// if (shouldBeBooking1.size() < 1) {
-			// log.warn("Booking not found! Issue with code detected.");
-			// } else {
-			// log.info("All is working so far!");
-			// }
 
 			// Used ChatGPT to generate 12 examples
 			

@@ -66,4 +66,5 @@ Professor says the API service needs to be a separate Java Project. We'll have t
 - [ ] Create a Chef name resolver service
 - [ ] Integrate the name resolvers into the controller  
 
-- [ ] Begin working on the API "Microservice" Project
+- [x] Begin working on the API "Microservice" Project
+- [x] Make it connect to the same H2 instance
