@@ -62,9 +62,20 @@ Professor says the API service needs to be a separate Java Project. We'll have t
 - [ ] Gray buttons out on the view page when not applicable
 - [ ] Make editing not possible depending on the status
 - [ ] Change buttons based on who's viewing it (Chef can accept depending on status)
+- [ ] Allow defining of `id` and `idType` cookies on the `/view` route
+- [ ] Create a status-modifying route `/status`
+- [ ] Create a confirmation modal on `/view` for status changing options (Accept, Reject, Cancel)
 - [ ] Create an Employer name resolver service
 - [ ] Create a Chef name resolver service
 - [ ] Integrate the name resolvers into the controller  
 
 - [x] Begin working on the API "Microservice" Project
 - [x] Make it connect to the same H2 instance
+
+... How are we going to decide who is viewing the view page in order to validate interactions with it?  
+Just include it in the view params? eg `/view/B001?id=CH1` and if CH1 matches chef ID for the view then enable chef buttons?  
+hmhmhmhm...  
+I think we do server-side identifying and just pass individual parameters to the template for which button to show.  
+EG. `showCancelButton`, `showEditButton`, `showRejectButton`, `showAcceptButton`  
+Also, for identification, we should allow passing of `id` and `idType` on view and list, and store them in a cookie, then use that to auto-populate the HREFs like we already do for just the view->list links. That way we can rely on it for identification when editing, and we allow linking to the views from other systems.  
+Nice!
