@@ -1,10 +1,13 @@
 package codes.c2k.BookingSystem;
 
+import java.io.IOException;
 import java.time.format.DateTimeParseException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -137,6 +140,37 @@ public class BookingController {
             return incorrectFormattingErrorPage(model);
         }
     }
+
+    @GetMapping("/auth")
+    public String authGateway(@RequestParam Map<String, String> allParams, HttpServletResponse response) throws IOException {
+        String id = allParams.get("id");
+        String idType = allParams.get("idType");
+        String page = allParams.get("page");
+        if (id == null || idType == null || page == null) {
+            response.sendError(400);
+        }
+
+        Cookie refIdCookie = new Cookie("refId", id);
+        Cookie refTypeCookie = new Cookie("refType", idType);
+        refIdCookie.setPath("/");
+        refTypeCookie.setPath("/");
+        response.addCookie(refIdCookie);
+        response.addCookie(refTypeCookie);
+
+        StringBuilder redirectUrl = new StringBuilder("redirect:/");
+        redirectUrl.append(page + "?");
+        
+        // You can iterate over allParams or access individual parameters by name
+        allParams.forEach((key, value) -> {
+            if (key.equalsIgnoreCase("page") || key.equalsIgnoreCase("id") || key.equalsIgnoreCase("idType")) return;
+            redirectUrl.append(key + "=" + value);
+            redirectUrl.append("&");
+        });
+        redirectUrl.deleteCharAt(redirectUrl.length()-1);
+        return redirectUrl.toString();
+    }
+
+
 
     private String bookingNotFoundErrorPage(Model model) {
         model.addAttribute("errorTitle", "Booking not Found");

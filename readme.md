@@ -79,3 +79,28 @@ I think we do server-side identifying and just pass individual parameters to the
 EG. `showCancelButton`, `showEditButton`, `showRejectButton`, `showAcceptButton`  
 Also, for identification, we should allow passing of `id` and `idType` on view and list, and store them in a cookie, then use that to auto-populate the HREFs like we already do for just the view->list links. That way we can rely on it for identification when editing, and we allow linking to the views from other systems.  
 Nice!
+
+---
+
+There are some inherent issues with the way we "verify" an identity. The security isn't an issue, since there is no pretense that we are building a _real_ system. However, we have to draw the activity diagram through which screens an individual will access and ask, is setting the `refId` and `refType` cookies on `list` and `view` enough?  
+If someone wants to create a booking, they're redirected from an external system to the `/create` page. At that point, they will create the page. When they submit and get redirected to the `/view` page, we have no way of knowing their identity and what to show them. That means we need ID on the create page too.  
+If we need `id` and `idType` on practically all pages, why even store it in a cookie? It might even be safer to always keep it in the URL, it makes the system more stateless.  
+So what we're proposing is the routes to look like this:  
+- `/list?id={id}&idType={idType}`
+- `/view/{bookingId}?id={id}&idType={idType}`
+- `/edit?bookingId={bookingId}&id={id}&idType={idType}`
+- `/create?employerId={employerId}&chefId={chefId}&id={id}&idType={idType}`
+- `/save/{bookingId}?id={id}&idType={idType}`  
+  
+This may seem overkill, but that's the most robust, fail-safe way to keep identity consistent across pages.  
+The other option I see is a sort of "portal" URL that external systems would link to. This portal page would set the cookies and redirect to the appropriate page.
+That way, we have one path of entry into the system and we can guarantee that the user has the appropriate identification cookies.
+It would look something like this:  
+`/auth?id={id}&idType={idType}&page={page}&...(page specific parameters)`  
+An example would be creating a new booking:  
+`/auth? id=EMP1 & idType=employer & page=create & employerId=EMP1 & chefId=CH2`  
+The problem with _this_ method of authorization is that links are not shareable. However, with the previous system, shared links would copy the identity of the source user. Sharing links is inherently a problem when identification is tied to the page contents. The only link in this system that should be shareable is the `/view` page, and at least with this authorization method, the copied link doesn't give the recipient unwanted access to identity-specific actions.
+
+---
+
+The `/create` route shouldn't need an `employerId` parameter, since the employer always creates the booking and we'll have the ID of the user at the time of creation.
