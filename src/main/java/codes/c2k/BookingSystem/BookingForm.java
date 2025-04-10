@@ -63,6 +63,7 @@ public class BookingForm {
         booking.setPaymentAgreement(agreement)
         .setChefId(chefId)
         .setEmployerId(employerId)
+        .setSchedule(newSchedule)
         .setStatus(status);
 
         return booking;
