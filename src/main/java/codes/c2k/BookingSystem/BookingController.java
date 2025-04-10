@@ -82,7 +82,7 @@ public class BookingController {
         }
 
         List<Booking> results;
-        if (userId.equalsIgnoreCase("employer")) {
+        if (userType.equalsIgnoreCase("employer")) {
             results = repository.findByEmployerId(userId);
         } else {
             results = repository.findByChefId(userId);
@@ -120,12 +120,20 @@ public class BookingController {
         if (!isValidIdentity(userId, userType)) {
             return missingIdentificationErrorPage(model);
         }
+
+        BookingStatus newStatus;
+        if (userType.equalsIgnoreCase("employer")) {
+            newStatus = BookingStatus.PENDING_CHEF;
+        } else {
+            newStatus = BookingStatus.PENDING_EMPLOYER;
+        }
         
         Optional<Booking> result = repository.findByBookingId(bookingId);
         if (result.isPresent()) {
             try {
                 Booking booking = result.get();
                 bookingForm.applyToBooking(booking);
+                booking.setStatus(newStatus);
                 service.saveBooking(booking);
                 return "redirect:/view/" + bookingId;
             } catch (DateTimeParseException exception) {
@@ -149,7 +157,6 @@ public class BookingController {
         model.addAttribute("postUrl", "/create");
         model.addAttribute("createMode", true);
         return "edit";
-        
     }
 
     // Actually allows creation from chefs as well.
@@ -206,11 +213,31 @@ public class BookingController {
         return redirectUrl.toString();
     }
 
-    private boolean isValidIdentity(String userId, String userType) {
-        return !userId.equals("NONE") && !userType.equals("NONE") && ( userType.equalsIgnoreCase("employer") || userType.equalsIgnoreCase("chef") );
+    @GetMapping("/change-status/{bookingId}")
+    public String changeStatus(Model model, @CookieValue(value = "userId", defaultValue = "NONE") String userId, @CookieValue(value = "userType", defaultValue = "NONE") String userType, @PathVariable String bookingId, @RequestParam BookingStatus status) {
+        if (!isValidIdentity(userId, userType)) {
+            return missingIdentificationErrorPage(model);
+        }
+
+        // TODO: Restrict status changes based on identity
+        
+        Optional<Booking> result = repository.findByBookingId(bookingId);
+        if (result.isPresent()) {
+            Booking booking = result.get();
+            booking.setStatus(status);
+            service.saveBooking(booking);
+            return "redirect:/view/" + booking.getBookingId();
+        } else {
+            return bookingNotFoundErrorPage(model);
+        }
     }
 
 
+
+
+    private boolean isValidIdentity(String userId, String userType) {
+        return !userId.equals("NONE") && !userType.equals("NONE") && ( userType.equalsIgnoreCase("employer") || userType.equalsIgnoreCase("chef") );
+    }
 
     private String bookingNotFoundErrorPage(Model model) {
         model.addAttribute("errorTitle", "Booking not Found");
@@ -221,12 +248,12 @@ public class BookingController {
         return "404";
     }
 
-    private String brokenLinkErrorPage(Model model) {
-        model.addAttribute("errorTitle", "Invalid URL parameters");
-        model.addAttribute("errorDescription",
-                "The URL parameters are invalid, so we can't provide proper results. Perhaps the URL was typed incorrectly? If you followed a link here, you should let the link-owner know their link is broken.");
-        return "404";
-    }
+    // private String brokenLinkErrorPage(Model model) {
+    //     model.addAttribute("errorTitle", "Invalid URL parameters");
+    //     model.addAttribute("errorDescription",
+    //             "The URL parameters are invalid, so we can't provide proper results. Perhaps the URL was typed incorrectly? If you followed a link here, you should let the link-owner know their link is broken.");
+    //     return "404";
+    // }
 
     private String incorrectFormattingErrorPage(Model model) {
         model.addAttribute("errorTitle", "Incorrectly formatted");

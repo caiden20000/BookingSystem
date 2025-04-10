@@ -75,13 +75,10 @@
               </div>
             </div>
             <div class="form-buttons-area">
-              <a class="a-button bold cancel-button">Cancel Booking</a>
-              <a
-                class="a-button bold edit-button"
-                href="/edit"
-                th:href="@{/edit?bookingId={id}(id = ${booking.bookingId})}"
-                >Edit Booking</a
-              >
+              <a th:if="${showCancelButton}" class="a-button bold bg-red" href="/edit" th:href="@{/change-status/{id}?status=CANCELLED(id = ${booking.bookingId})}">Cancel Booking</a>
+              <a th:if="${showEditButton}" class="a-button bold bg-yellow" href="/edit" th:href="@{/edit?bookingId={id}(id = ${booking.bookingId})}">Edit Booking</a>
+              <a th:if="${showRejectButton}" class="a-button bold bg-red" href="/edit" th:href="@{/change-status/{id}?status=REJECTED(id = ${booking.bookingId})}">Reject</a>
+              <a th:if="${showAcceptButton}" class="a-button bold bg-green" href="/edit" th:href="@{/change-status/{id}?status=ACCEPTED(id = ${booking.bookingId})}">Accept</a>
             </div>
           </div>
         </main>
