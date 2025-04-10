@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -33,58 +32,75 @@ public class BookingController {
 
     // "/view" is the request URL, which is mapped to the root url, for example: www.booking.com/view
     @GetMapping("/view/{bookingId}") // vvvvvvv This variable is from the path we specified in GetMapping
-    public String viewBooking(@PathVariable(value = "bookingId") String bookingId, Model model, @CookieValue(value = "refId", defaultValue = "ERR") String refId, @CookieValue(value = "refType", defaultValue = "ERR") String refType) {
+    public String viewBooking(@PathVariable(value = "bookingId") String bookingId, Model model, @CookieValue(value = "userId", defaultValue = "NONE") String userId, @CookieValue(value = "userType", defaultValue = "NONE") String userType) {
         Optional<Booking> result = repository.findByBookingId(bookingId);
         if (result.isPresent()) {
-            // Here, we're adding a variable for the thymeleaf template to use. ${booking}
-            // will refer to result.get()'s output.
-            model.addAttribute("booking", result.get());
+            Booking booking = result.get();
 
-            // These are cookie attributes we got from @CookieValue in the function signature.
-            // They refer to the id and idType from the list view. We fill in the link back to
-            // the list page with these.
-            model.addAttribute("refId", refId);
-            model.addAttribute("refType", refType);
-
-            // Returning a string from a GetMapping function is returning the templated HTML
-            // with that name.
-            // So here, we're returning view.html and filling it in with everything passed
-            // into the model via addAttribute()
+            boolean showCancelButton = false;
+            boolean showEditButton = false;
+            boolean showRejectButton = false;
+            boolean showAcceptButton = false;
+            if (isValidIdentity(userId, userType)) {
+                if (userType.equalsIgnoreCase("employer")) {
+                    if (booking.getStatus() == BookingStatus.PENDING_CHEF) {
+                        showCancelButton = true;
+                    } else if (booking.getStatus() == BookingStatus.PENDING_EMPLOYER) {
+                        showAcceptButton = true;
+                        showRejectButton = true;
+                    } else if (booking.getStatus() == BookingStatus.ACCEPTED) {
+                        showCancelButton = true;
+                        showEditButton = true;
+                    }
+                } else {
+                    if (booking.getStatus() == BookingStatus.PENDING_CHEF) {
+                        showAcceptButton = true;
+                        showRejectButton = true;
+                    } else if (booking.getStatus() == BookingStatus.PENDING_EMPLOYER) {
+                        showCancelButton = true;
+                    } else if (booking.getStatus() == BookingStatus.ACCEPTED) {
+                        showCancelButton = true;
+                    }
+                }
+            }
+            model.addAttribute("booking", booking);
+            model.addAttribute("showCancelButton", showCancelButton);
+            model.addAttribute("showEditButton", showEditButton);
+            model.addAttribute("showRejectButton", showRejectButton);
+            model.addAttribute("showAcceptButton", showAcceptButton);
             return "view";
         } else {
-            // In this branch, we're going to return an error, which is a different template.
-            // This template wants errorTitle and errorDescription to be specified.
             return bookingNotFoundErrorPage(model);
         }
     }
 
+    // Must have ID cookies set to visit.
     @GetMapping("/list")
-    public String viewBooking(@RequestParam String id, @RequestParam String idType, Model model, HttpServletResponse response) {
-        if (idType.equalsIgnoreCase("employer")) {
-            List<Booking> results = repository.findByEmployerId(id);
-            model.addAttribute("bookingList", results);
-
-            Cookie refIdCookie = new Cookie("refId", id);
-            Cookie refTypeCookie = new Cookie("refType", idType);
-            refIdCookie.setPath("/");
-            refTypeCookie.setPath("/");
-            response.addCookie(refIdCookie);
-            response.addCookie(refTypeCookie);
-
-            return "list";
-        } else if (idType.equalsIgnoreCase("chef")) {
-            List<Booking> results = repository.findByChefId(id);
-            model.addAttribute("bookingList", results);
-            return "list";
-        } else {
-            return brokenLinkErrorPage(model);
+    public String listBookings(@CookieValue(value = "userId", defaultValue = "NONE") String userId, @CookieValue(value = "userType", defaultValue = "NONE") String userType, Model model, HttpServletResponse response) {
+        if (!isValidIdentity(userId, userType)) {
+            return missingIdentificationErrorPage(model);
         }
+
+        List<Booking> results;
+        if (userId.equalsIgnoreCase("employer")) {
+            results = repository.findByEmployerId(userId);
+        } else {
+            results = repository.findByChefId(userId);
+        }
+
+        model.addAttribute("bookingList", results);
+        return "list";
     }
 
     // Edit a booking based on the ID of the booking.
     // If the booking doesn't exist, return the 404 page.
+    // Must have ID cookies set to visit.
     @GetMapping("/edit")
-    public String editBooking(@RequestParam String bookingId, Model model) {
+    public String editBooking(@CookieValue(value = "userId", defaultValue = "NONE") String userId, @CookieValue(value = "userType", defaultValue = "NONE") String userType, @RequestParam String bookingId, Model model) {
+        if (!isValidIdentity(userId, userType)) {
+            return missingIdentificationErrorPage(model);
+        }
+        
         Optional<Booking> result = repository.findByBookingId(bookingId);
         if (result.isPresent()) {
             Booking booking = result.get();
@@ -100,7 +116,11 @@ public class BookingController {
     }
 
     @PostMapping("/save/{bookingId}")
-    public String saveBooking(@PathVariable(value = "bookingId") String bookingId, @ModelAttribute("bookingForm") BookingForm bookingForm, Model model) {
+    public String saveBooking(@CookieValue(value = "userId", defaultValue = "NONE") String userId, @CookieValue(value = "userType", defaultValue = "NONE") String userType, @PathVariable(value = "bookingId") String bookingId, @ModelAttribute("bookingForm") BookingForm bookingForm, Model model) {
+        if (!isValidIdentity(userId, userType)) {
+            return missingIdentificationErrorPage(model);
+        }
+        
         Optional<Booking> result = repository.findByBookingId(bookingId);
         if (result.isPresent()) {
             try {
@@ -119,8 +139,11 @@ public class BookingController {
     // // Create a booking based on the employer and chef IDs
     // // If the employer or chef IDs fail validation, return the 404 page.
     @GetMapping("/create")
-    public String createBooking(@RequestParam String employerId, @RequestParam String chefId, Model model) {
-        
+    public String createBooking(@CookieValue(value = "userId", defaultValue = "NONE") String userId, @CookieValue(value = "userType", defaultValue = "NONE") String userType, @RequestParam String employerId, @RequestParam String chefId, Model model) {
+        if (!isValidIdentity(userId, userType)) {
+            return missingIdentificationErrorPage(model);
+        }
+
         BookingForm bookingForm = BookingForm.emptyBookingForm(employerId, chefId);
         model.addAttribute("bookingForm", bookingForm);
         model.addAttribute("postUrl", "/create");
@@ -129,10 +152,22 @@ public class BookingController {
         
     }
 
+    // Actually allows creation from chefs as well.
     @PostMapping("/create")
-    public String saveCreateBooking(@ModelAttribute("bookingForm") BookingForm bookingForm, Model model) {
+    public String saveCreateBooking(@CookieValue(value = "userId", defaultValue = "NONE") String userId, @CookieValue(value = "userType", defaultValue = "NONE") String userType, @ModelAttribute("bookingForm") BookingForm bookingForm, Model model) {
+        if (!isValidIdentity(userId, userType)) {
+            return missingIdentificationErrorPage(model);
+        }
+
+        BookingStatus newStatus;
+        if (userType.equalsIgnoreCase("employer")) {
+            newStatus = BookingStatus.PENDING_CHEF;
+        } else {
+            newStatus = BookingStatus.PENDING_EMPLOYER;
+        }
+
         try {
-            Booking newBooking = bookingForm.toBooking(BookingStatus.PENDING_CHEF);
+            Booking newBooking = bookingForm.toBooking(newStatus);
             // Must save in order to set auto-generated bookingId
             service.saveBooking(newBooking);
             return "redirect:/view/" + newBooking.getBookingId();
@@ -150,8 +185,8 @@ public class BookingController {
             response.sendError(400);
         }
 
-        Cookie refIdCookie = new Cookie("refId", id);
-        Cookie refTypeCookie = new Cookie("refType", idType);
+        Cookie refIdCookie = new Cookie("userId", id);
+        Cookie refTypeCookie = new Cookie("userType", idType);
         refIdCookie.setPath("/");
         refTypeCookie.setPath("/");
         response.addCookie(refIdCookie);
@@ -166,8 +201,13 @@ public class BookingController {
             redirectUrl.append(key + "=" + value);
             redirectUrl.append("&");
         });
+        // Delete trailing ampersand
         redirectUrl.deleteCharAt(redirectUrl.length()-1);
         return redirectUrl.toString();
+    }
+
+    private boolean isValidIdentity(String userId, String userType) {
+        return !userId.equals("NONE") && !userType.equals("NONE") && ( userType.equalsIgnoreCase("employer") || userType.equalsIgnoreCase("chef") );
     }
 
 
@@ -192,6 +232,13 @@ public class BookingController {
         model.addAttribute("errorTitle", "Incorrectly formatted");
         model.addAttribute("errorDescription",
                 "The submitted information was incorrectly formatted. This usually happens because the date or times were not in the proper format. Dates should be 'MM/DD/YYYY', and times should be 'HH:MM AA - HH:MM AA'.");
+        return "404";
+    }
+
+    private String missingIdentificationErrorPage(Model model) {
+        model.addAttribute("errorTitle", "Unauthorized");
+        model.addAttribute("errorDescription",
+                "You must log in to view this page! Log in to your portal first, then navigate to this page from there.");
         return "404";
     }
 }

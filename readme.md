@@ -59,6 +59,7 @@ Professor says the API service needs to be a separate Java Project. We'll have t
 - [x] Move that ref into cookies
 - [x] Set up the repository
 - [x] Make the edit page create a booking if specified
+- [ ] Switch to auth entrypoint and cookies as identification
 - [ ] Gray buttons out on the view page when not applicable
 - [ ] Make editing not possible depending on the status
 - [ ] Change buttons based on who's viewing it (Chef can accept depending on status)
@@ -71,6 +72,8 @@ Professor says the API service needs to be a separate Java Project. We'll have t
 
 - [x] Begin working on the API "Microservice" Project
 - [x] Make it connect to the same H2 instance
+
+## Identification
 
 ... How are we going to decide who is viewing the view page in order to validate interactions with it?  
 Just include it in the view params? eg `/view/B001?id=CH1` and if CH1 matches chef ID for the view then enable chef buttons?  
@@ -99,7 +102,17 @@ It would look something like this:
 `/auth?id={id}&idType={idType}&page={page}&...(page specific parameters)`  
 An example would be creating a new booking:  
 `/auth? id=EMP1 & idType=employer & page=create & employerId=EMP1 & chefId=CH2`  
-The problem with _this_ method of authorization is that links are not shareable. However, with the previous system, shared links would copy the identity of the source user. Sharing links is inherently a problem when identification is tied to the page contents. The only link in this system that should be shareable is the `/view` page, and at least with this authorization method, the copied link doesn't give the recipient unwanted access to identity-specific actions.
+The problem with _this_ method of authorization is that links are not shareable. However, with the previous system, shared links would copy the identity of the source user. Sharing links is inherently a problem when identification is tied to the page contents. The only link in this system that should be shareable is the `/view` page, and at least with this authorization method, the copied link doesn't give the recipient unwanted access to identity-specific actions.  
+  
+OK so we're going with the latter: `/auth` entrypoint.
+Let's lay out what happens on each page if you visit it without cookies:  
+- `/list`: Identity Missing Error
+- `/edit`: Identity Missing Error
+- `/save`: Identity Missing Error
+- `/create`: Identity Missing Error
+- `/view`: Valid without identity, but potential actions (reject, accept, edit, cancel) are absent.  
+  
+If you visit a page without the cookies, the error page should tell you to log in to their appropriate system first. We have to assume that any broken links are due to user behaviour. If all links in all systems are formatted correctly, then the only time a user should get the error IdentityMissingErrorPage is if they manually visited a page without going through the Employer or Chef system.
 
 ---
 
