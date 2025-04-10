@@ -68,6 +68,7 @@ public class BookingController {
             model.addAttribute("showEditButton", showEditButton);
             model.addAttribute("showRejectButton", showRejectButton);
             model.addAttribute("showAcceptButton", showAcceptButton);
+            model.addAttribute("showListButton", !userId.equals("NONE"));
             return "view";
         } else {
             return bookingNotFoundErrorPage(model);
