@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width" />
     <link rel="stylesheet" href="/global-styles.css" th:href="@{/global-styles.css}" />
     <link rel="stylesheet" href="/view-styles.css" th:href="@{/view-styles.css}" />
-    <!-- <script type="module" src="script.js"></script> -->
+    <script type="module" src="/change-status-confirmation.js" th:src="@{/change-status-confirmation.js}"></script>
   </head>
   <body>
     <div class="main-grid">
@@ -75,10 +75,10 @@
               </div>
             </div>
             <div class="form-buttons-area">
-              <a th:if="${showCancelButton}" class="a-button bold bg-red" href="/edit" th:href="@{/change-status/{id}?status=CANCELLED(id = ${booking.bookingId})}">Cancel Booking</a>
+              <a th:if="${showCancelButton}" th:attr="data-id=${booking.bookingId}" data-status="CANCELLED" class="a-button bold bg-red">Cancel Booking</a>
               <a th:if="${showEditButton}" class="a-button bold bg-yellow" href="/edit" th:href="@{/edit?bookingId={id}(id = ${booking.bookingId})}">Edit Booking</a>
-              <a th:if="${showRejectButton}" class="a-button bold bg-red" href="/edit" th:href="@{/change-status/{id}?status=REJECTED(id = ${booking.bookingId})}">Reject</a>
-              <a th:if="${showAcceptButton}" class="a-button bold bg-green" href="/edit" th:href="@{/change-status/{id}?status=ACCEPTED(id = ${booking.bookingId})}">Accept</a>
+              <a th:if="${showRejectButton}" th:attr="data-id=${booking.bookingId}" data-status="REJECTED" class="a-button bold bg-red">Reject</a>
+              <a th:if="${showAcceptButton}" th:attr="data-id=${booking.bookingId}" data-status="ACCEPTED" class="a-button bold bg-green">Accept</a>
             </div>
           </div>
         </main>
