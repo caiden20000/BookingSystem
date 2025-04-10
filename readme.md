@@ -65,7 +65,7 @@ Professor says the API service needs to be a separate Java Project. We'll have t
 - [x] Change buttons based on who's viewing it (Chef can accept depending on status)
 - [x] Allow defining of `id` and `idType` cookies on the `/view` route
 - [x] Create a status-modifying route `/change-status`
-- [ ] Create a confirmation modal on `/view` for status changing options (Accept, Reject, Cancel)
+- [x] Create a confirmation modal on `/view` for status changing options (Accept, Reject, Cancel)
 - [ ] Create an Employer name resolver service
 - [ ] Create a Chef name resolver service
 - [ ] Integrate the name resolvers into the controller  
