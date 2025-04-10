@@ -58,7 +58,7 @@ Professor says the API service needs to be a separate Java Project. We'll have t
 - [x] Store a ref in the page queries so you can always get back to where you came from
 - [x] Move that ref into cookies
 - [x] Set up the repository
-- [ ] Make the edit page create a booking if specified
+- [x] Make the edit page create a booking if specified
 - [ ] Gray buttons out on the view page when not applicable
 - [ ] Make editing not possible depending on the status
 - [ ] Change buttons based on who's viewing it (Chef can accept depending on status)

@@ -51,12 +51,7 @@ public class BookingController {
         } else {
             // In this branch, we're going to return an error, which is a different template.
             // This template wants errorTitle and errorDescription to be specified.
-            model.addAttribute("errorTitle", "Booking not Found");
-            model.addAttribute("errorDescription",
-                    "We're sorry, but the URL provided doesn't link to a valid Booking in our database. Perhaps the URL was entered incorrectly?");
-            // We're returning "404.html" with all the template portions filled in.
-            // This is not returning a 404 status.
-            return "404";
+            return bookingNotFoundErrorPage(model);
         }
     }
 
@@ -79,10 +74,7 @@ public class BookingController {
             model.addAttribute("bookingList", results);
             return "list";
         } else {
-            model.addAttribute("errorTitle", "Invalid parameters");
-            model.addAttribute("errorDescription",
-                    "The URL parameters are invalid, so we can't provide proper results. Perhaps the URL was typed incorrectly? If you followed a link here, you should let the link-owner know their link is broken.");
-            return "404";
+            return brokenLinkErrorPage(model);
         }
     }
 
@@ -100,10 +92,7 @@ public class BookingController {
             model.addAttribute("createMode", false);
             return "edit";
         } else {
-            model.addAttribute("errorTitle", "Booking not Found");
-            model.addAttribute("errorDescription",
-                    "We're sorry, but the URL provided doesn't link to a valid Booking in our database. Perhaps the URL was entered incorrectly?");
-            return "404";
+            return bookingNotFoundErrorPage(model);
         }
     }
 
@@ -117,16 +106,10 @@ public class BookingController {
                 service.saveBooking(booking);
                 return "redirect:/view/" + bookingId;
             } catch (DateTimeParseException exception) {
-                model.addAttribute("errorTitle", "Incorrectly formatted");
-                model.addAttribute("errorDescription",
-                        "The submitted information was incorrectly formatted. This usually happens because the date or times were not in the proper format. Dates should be 'MM/DD/YYYY', and times should be 'HH:MM AA - HH:MM AA'.");
-                return "404";
+                return incorrectFormattingErrorPage(model);
             } 
         } else {
-            model.addAttribute("errorTitle", "Booking not Found");
-            model.addAttribute("errorDescription",
-                    "We're sorry, but the URL provided doesn't link to a valid Booking in our database. Perhaps the URL was entered incorrectly?");
-            return "404";
+            return bookingNotFoundErrorPage(model);
         }
     }
 
@@ -143,8 +126,38 @@ public class BookingController {
         
     }
 
-    // @PostMapping("/create")
-    // public String saveCreateBooking() {
+    @PostMapping("/create")
+    public String saveCreateBooking(@ModelAttribute("bookingForm") BookingForm bookingForm, Model model) {
+        try {
+            Booking newBooking = bookingForm.toBooking(BookingStatus.PENDING_CHEF);
+            // Must save in order to set auto-generated bookingId
+            service.saveBooking(newBooking);
+            return "redirect:/view/" + newBooking.getBookingId();
+        } catch (DateTimeParseException exception) {
+            return incorrectFormattingErrorPage(model);
+        }
+    }
 
-    // }
+    private String bookingNotFoundErrorPage(Model model) {
+        model.addAttribute("errorTitle", "Booking not Found");
+        model.addAttribute("errorDescription",
+                "We're sorry, but the URL provided doesn't link to a valid Booking in our database. Perhaps the URL was entered incorrectly?");
+        // We're returning "404.html" with all the template portions filled in.
+        // This is not returning a 404 status.
+        return "404";
+    }
+
+    private String brokenLinkErrorPage(Model model) {
+        model.addAttribute("errorTitle", "Invalid URL parameters");
+        model.addAttribute("errorDescription",
+                "The URL parameters are invalid, so we can't provide proper results. Perhaps the URL was typed incorrectly? If you followed a link here, you should let the link-owner know their link is broken.");
+        return "404";
+    }
+
+    private String incorrectFormattingErrorPage(Model model) {
+        model.addAttribute("errorTitle", "Incorrectly formatted");
+        model.addAttribute("errorDescription",
+                "The submitted information was incorrectly formatted. This usually happens because the date or times were not in the proper format. Dates should be 'MM/DD/YYYY', and times should be 'HH:MM AA - HH:MM AA'.");
+        return "404";
+    }
 }

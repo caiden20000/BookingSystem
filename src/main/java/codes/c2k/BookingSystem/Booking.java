@@ -10,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.PrePersist;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -20,11 +21,15 @@ import lombok.experimental.Accessors;
 public class Booking {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE) 
+    // GenerationType.SEQUENCE required for bookingID setting.
     private long id;
 
     @Setter
-    private String bookingId = ((Long) id).toString();
+    // If you want to get a generated bookingId, you must
+    // save the booking to the data store BEFORE you getBookingId().
+    // This setting is facilitated by the @PrePersist method below.
+    private String bookingId = "TEMP";
 
     @Setter
     private String employerId;
@@ -56,6 +61,11 @@ public class Booking {
         if (status == BookingStatus.COMPLETED) return "bg-gray";
         return "bg-gray";
     }
-    
-    
+
+    // Sets the bookingId to the generated id value BEFORE storing.
+    @PrePersist
+    public void onPrePersist() {
+        this.bookingId = Long.toString(id);
+    }
+
 }
