@@ -25,9 +25,6 @@ import lombok.extern.slf4j.Slf4j;
 public class BookingController {
 
     @Autowired
-    BookingService service;
-
-    @Autowired
     BookingRepository repository;
 
     @GetMapping("/")
@@ -139,7 +136,7 @@ public class BookingController {
                 Booking booking = result.get();
                 bookingForm.applyToBooking(booking);
                 booking.setStatus(newStatus);
-                service.saveBooking(booking);
+                repository.save(booking);
                 return "redirect:/view/" + bookingId;
             } catch (DateTimeParseException exception) {
                 return incorrectFormattingErrorPage(model);
@@ -181,7 +178,7 @@ public class BookingController {
         try {
             Booking newBooking = bookingForm.toBooking(newStatus);
             // Must save in order to set auto-generated bookingId
-            service.saveBooking(newBooking);
+            repository.save(newBooking);
             return "redirect:/view/" + newBooking.getBookingId();
         } catch (DateTimeParseException exception) {
             return incorrectFormattingErrorPage(model);
@@ -230,7 +227,7 @@ public class BookingController {
         if (result.isPresent()) {
             Booking booking = result.get();
             booking.setStatus(status);
-            service.saveBooking(booking);
+            repository.save(booking);
             return "redirect:/view/" + booking.getBookingId();
         } else {
             return bookingNotFoundErrorPage(model);

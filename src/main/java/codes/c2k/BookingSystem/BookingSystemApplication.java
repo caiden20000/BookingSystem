@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.h2.tools.Server;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,9 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 @SpringBootApplication
 @Slf4j
 public class BookingSystemApplication {
-
-	@Autowired
-	BookingService service;
 
 	public static void main(String[] args) {
 		SpringApplication.run(BookingSystemApplication.class, args);
@@ -56,7 +52,7 @@ public class BookingSystemApplication {
 					.setSchedule(schedule1)
 					.setPaymentAgreement(agreement1);
 
-			service.saveBooking(booking1);
+			repository.save(booking1);
 
 			// Booking 2: Two-day event, Employer EMP1, Chef CH1 (2nd of 2 for CH1)
 			PaymentAgreement agreement2 = new PaymentAgreement();
@@ -77,7 +73,7 @@ public class BookingSystemApplication {
 					.setSchedule(schedule2)
 					.setPaymentAgreement(agreement2);
 
-			service.saveBooking(booking2);
+			repository.save(booking2);
 
 			// Booking 3: Three-day event, Employer EMP1, Chef CH2 (1st of 4 for CH2)
 			PaymentAgreement agreement3 = new PaymentAgreement();
@@ -99,7 +95,7 @@ public class BookingSystemApplication {
 					.setSchedule(schedule3)
 					.setPaymentAgreement(agreement3);
 
-			service.saveBooking(booking3);
+			repository.save(booking3);
 
 			// Booking 4: Four-day event, Employer EMP1, Chef CH2 (2nd for CH2)
 			PaymentAgreement agreement4 = new PaymentAgreement();
@@ -122,7 +118,7 @@ public class BookingSystemApplication {
 					.setSchedule(schedule4)
 					.setPaymentAgreement(agreement4);
 
-			service.saveBooking(booking4);
+			repository.save(booking4);
 
 			// Booking 5: Five-day event, Employer EMP1, Chef CH2 (3rd for CH2)
 			PaymentAgreement agreement5 = new PaymentAgreement();
@@ -146,7 +142,7 @@ public class BookingSystemApplication {
 					.setSchedule(schedule5)
 					.setPaymentAgreement(agreement5);
 
-			service.saveBooking(booking5);
+			repository.save(booking5);
 
 			// Booking 6: Three-day event (different time), Employer EMP2, Chef CH2 (4th for
 			// CH2)
@@ -169,7 +165,7 @@ public class BookingSystemApplication {
 					.setSchedule(schedule6)
 					.setPaymentAgreement(agreement6);
 
-			service.saveBooking(booking6);
+			repository.save(booking6);
 
 			// Booking 7: Seven-day event, Employer EMP2, Chef CH3 (1st for CH3)
 			PaymentAgreement agreement7 = new PaymentAgreement();
@@ -191,7 +187,7 @@ public class BookingSystemApplication {
 					.setSchedule(schedule7)
 					.setPaymentAgreement(agreement7);
 
-			service.saveBooking(booking7);
+			repository.save(booking7);
 
 			// Booking 8: Eight-day event, Employer EMP2, Chef CH3 (2nd for CH3)
 			PaymentAgreement agreement8 = new PaymentAgreement();
@@ -218,7 +214,7 @@ public class BookingSystemApplication {
 					.setSchedule(schedule8)
 					.setPaymentAgreement(agreement8);
 
-			service.saveBooking(booking8);
+			repository.save(booking8);
 
 			// Booking 9: Nine-day event, Employer EMP2, Chef CH3 (3rd for CH3)
 			PaymentAgreement agreement9 = new PaymentAgreement();
@@ -240,7 +236,7 @@ public class BookingSystemApplication {
 					.setSchedule(schedule9)
 					.setPaymentAgreement(agreement9);
 
-			service.saveBooking(booking9);
+			repository.save(booking9);
 
 			// Booking 10: Ten-day event, Employer EMP2, Chef CH3 (4th for CH3)
 			PaymentAgreement agreement10 = new PaymentAgreement();
@@ -262,7 +258,7 @@ public class BookingSystemApplication {
 					.setSchedule(schedule10)
 					.setPaymentAgreement(agreement10);
 
-			service.saveBooking(booking10);
+			repository.save(booking10);
 
 			// Booking 11: Eleven-day event, Employer EMP2, Chef CH3 (5th for CH3)
 			PaymentAgreement agreement11 = new PaymentAgreement();
@@ -285,7 +281,7 @@ public class BookingSystemApplication {
 					.setSchedule(schedule11)
 					.setPaymentAgreement(agreement11);
 
-			service.saveBooking(booking11);
+			repository.save(booking11);
 
 			// Booking 12: Twelve-day event, Employer EMP2, Chef CH3 (6th for CH3)
 			PaymentAgreement agreement12 = new PaymentAgreement();
@@ -307,7 +303,7 @@ public class BookingSystemApplication {
 					.setSchedule(schedule12)
 					.setPaymentAgreement(agreement12);
 
-			service.saveBooking(booking12);
+			repository.save(booking12);
 
 			log.info("Example bookings added!");
 		};
