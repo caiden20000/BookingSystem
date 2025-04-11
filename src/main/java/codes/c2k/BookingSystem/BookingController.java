@@ -30,6 +30,11 @@ public class BookingController {
     @Autowired
     BookingRepository repository;
 
+    @GetMapping("/")
+    public String rootRedirect() {
+        return "redirect:/list";
+    }
+
     @GetMapping("/view/{bookingId}")
     public String viewBooking(@PathVariable(value = "bookingId") String bookingId, Model model, @CookieValue(value = "userId", defaultValue = "NONE") String userId, @CookieValue(value = "userType", defaultValue = "NONE") String userType) {
         Optional<Booking> result = repository.findByBookingId(bookingId);
