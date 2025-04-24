@@ -1,6 +1,10 @@
 # Booking Subsystem
 
-## hello
+## ello
+This is a brainstorming / planning document. Reading through it might give the impression of a how-to or official documentation, but this document is
+simply where I put down my thoughts and things to remember. As a result, some information may be out of date, and much more is simply missing.
+
+## Project Setup
 
 To start the project, I used [Spring Initializr](https://start.spring.io/index.html).
 Using https://github.com/SWE443/Demo/tree/master/demo as a guide, I determined the following dependencies to add in Spring Initializr:
