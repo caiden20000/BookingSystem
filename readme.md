@@ -72,6 +72,7 @@ Professor says the API service needs to be a separate Java Project. We'll have t
 
 - [x] Begin working on the API "Microservice" Project
 - [x] Make it connect to the same H2 instance
+- [x] Rekajiggy the git to have both java projects 
 
 ## Identification
 
