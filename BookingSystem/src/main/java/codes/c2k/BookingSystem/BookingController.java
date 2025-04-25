@@ -25,7 +25,10 @@ import lombok.extern.slf4j.Slf4j;
 public class BookingController {
 
     @Autowired
-    BookingRepository repository;
+    BookingService service;
+
+    @Autowired
+    NameResolverService nameResolver;
 
     @GetMapping("/")
     public String rootRedirect() {
@@ -34,7 +37,7 @@ public class BookingController {
 
     @GetMapping("/view/{bookingId}")
     public String viewBooking(@PathVariable(value = "bookingId") String bookingId, Model model, @CookieValue(value = "userId", defaultValue = "NONE") String userId, @CookieValue(value = "userType", defaultValue = "NONE") String userType) {
-        Optional<Booking> result = repository.findByBookingId(bookingId);
+        Optional<Booking> result = service.findByBookingId(bookingId);
         if (result.isPresent()) {
             Booking booking = result.get();
 
@@ -83,12 +86,7 @@ public class BookingController {
             return missingIdentificationErrorPage(model);
         }
 
-        List<Booking> results;
-        if (userType.equalsIgnoreCase("employer")) {
-            results = repository.findByEmployerId(userId);
-        } else {
-            results = repository.findByChefId(userId);
-        }
+        List<Booking> results = service.findById(userId, userType);
 
         model.addAttribute("bookingList", results);
         return "list";
@@ -103,7 +101,7 @@ public class BookingController {
             return missingIdentificationErrorPage(model);
         }
         
-        Optional<Booking> result = repository.findByBookingId(bookingId);
+        Optional<Booking> result = service.findByBookingId(bookingId);
         if (result.isPresent()) {
             Booking booking = result.get();
             BookingForm bookingForm = BookingForm.fromBooking(booking);
@@ -130,13 +128,13 @@ public class BookingController {
             newStatus = BookingStatus.PENDING_EMPLOYER;
         }
         
-        Optional<Booking> result = repository.findByBookingId(bookingId);
+        Optional<Booking> result = service.findByBookingId(bookingId);
         if (result.isPresent()) {
             try {
                 Booking booking = result.get();
                 bookingForm.applyToBooking(booking);
                 booking.setStatus(newStatus);
-                repository.save(booking);
+                service.saveBooking(booking);
                 return "redirect:/view/" + bookingId;
             } catch (DateTimeParseException exception) {
                 return incorrectFormattingErrorPage(model);
@@ -158,6 +156,8 @@ public class BookingController {
         model.addAttribute("bookingForm", bookingForm);
         model.addAttribute("postUrl", "/create");
         model.addAttribute("createMode", true);
+        model.addAttribute("employerName", nameResolver.getName(employerId, "employer"));
+        model.addAttribute("chefName", nameResolver.getName(chefId, "chef"));
         return "edit";
     }
 
@@ -178,7 +178,7 @@ public class BookingController {
         try {
             Booking newBooking = bookingForm.toBooking(newStatus);
             // Must save in order to set auto-generated bookingId
-            repository.save(newBooking);
+            service.saveBooking(newBooking);
             return "redirect:/view/" + newBooking.getBookingId();
         } catch (DateTimeParseException exception) {
             return incorrectFormattingErrorPage(model);
@@ -223,11 +223,11 @@ public class BookingController {
 
         // TODO: Restrict status changes based on identity
         
-        Optional<Booking> result = repository.findByBookingId(bookingId);
+        Optional<Booking> result = service.findByBookingId(bookingId);
         if (result.isPresent()) {
             Booking booking = result.get();
             booking.setStatus(status);
-            repository.save(booking);
+            service.saveBooking(booking);
             return "redirect:/view/" + booking.getBookingId();
         } else {
             return bookingNotFoundErrorPage(model);
