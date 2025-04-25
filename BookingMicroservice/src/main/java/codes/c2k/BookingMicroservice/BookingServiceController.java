@@ -14,10 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @Slf4j
-public class BookingController {
-
-    @Autowired
-    BookingService service;
+public class BookingServiceController {
 
     @Autowired
     BookingRepository repository;
