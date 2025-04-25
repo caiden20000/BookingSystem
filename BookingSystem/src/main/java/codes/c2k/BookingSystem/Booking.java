@@ -17,6 +17,7 @@ import lombok.experimental.Accessors;
 
 @Accessors(chain = true)
 @Entity
+@Setter
 @Getter
 public class Booking {
     
@@ -25,16 +26,16 @@ public class Booking {
     // GenerationType.SEQUENCE required for bookingID setting.
     private long id;
 
-    @Setter
     // If you want to get a generated bookingId, you must
     // save the booking to the data store BEFORE you getBookingId().
     // This setting is facilitated by the @PrePersist method below.
     private String bookingId = "TEMP";
 
-    @Setter
     private String employerId;
-    @Setter
     private String chefId;
+
+    private String employerName = "DEFAULT_EMPLOYER_NAME";
+    private String chefName = "DEFAULT_CHEF_NAME";
     
     @Setter // ONLY use setter when initializing!!
     @ElementCollection
@@ -42,12 +43,10 @@ public class Booking {
     // Modify the list by modifying the returned List object.
     private List<BookingTime> schedule;
 
-    @Setter @Embedded
+    @Embedded
     private PaymentAgreement paymentAgreement;
     
-    @Setter
     private BookingStatus status;
-    @Setter
     private String description;
 
     protected Booking() {}
