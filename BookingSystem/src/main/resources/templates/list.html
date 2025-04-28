@@ -39,9 +39,9 @@
                                 <span th:text="${booking.status}">Unknown</span>
                             </div>
                             <div class="value-grid a-center">
-                                <span class="bold list-text-label">Chef:</span><span class="nobreak" th:text="${booking.chefId}">Unknown</span>
+                                <span class="bold list-text-label">Chef:</span><span class="nobreak" th:text="${booking.chefName}">Unknown</span>
                                 <span class="bold list-text-label">Employer:</span>
-                                <span class="nobreak" th:text="${booking.employerId}">Unknown</span>
+                                <span class="nobreak" th:text="${booking.employerName}">Unknown</span>
                             </div>
                             <div class="value-grid a-center" th:with="first=${booking.schedule[0]}, last=${booking.schedule[booking.schedule.size()-1]}">
                                 <span class="bold list-text-label">Start:</span><span th:text="${#temporals.format(first.startTime, 'MM/dd', 'America/New_York')}">TBD...</span>

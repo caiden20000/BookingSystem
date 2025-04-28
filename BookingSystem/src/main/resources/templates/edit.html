@@ -37,11 +37,11 @@
             <div class="view-grid">
               <div class="party-info-area">
                 <div class="nobreak-contents">
-                  <span class="bold">Chef:</span> <span th:text="*{chefId}">Unknown</span>
+                  <span class="bold">Chef:</span> <span th:text="${chefName}">Unknown</span>
                   <input type="hidden" th:field="*{chefId}">
                 </div>
                 <div class="nobreak-contents">
-                  <span class="bold">Employer:</span> <span th:text="*{employerId}">Unknown</span>
+                  <span class="bold">Employer:</span> <span th:text="${employerName}">Unknown</span>
                   <input type="hidden" th:field="*{employerId}">
                 </div>
               </div>

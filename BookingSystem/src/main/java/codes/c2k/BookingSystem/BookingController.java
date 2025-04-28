@@ -109,6 +109,8 @@ public class BookingController {
             model.addAttribute("bookingForm", bookingForm);
             model.addAttribute("postUrl", "/save/" + bookingId);
             model.addAttribute("createMode", false);
+            model.addAttribute("employerName", booking.getEmployerName());
+            model.addAttribute("chefName", booking.getChefName());
             return "edit";
         } else {
             return bookingNotFoundErrorPage(model);
