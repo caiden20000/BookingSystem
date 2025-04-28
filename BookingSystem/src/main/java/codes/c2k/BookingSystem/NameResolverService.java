@@ -25,7 +25,7 @@ public class NameResolverService {
 
     private String getFullChefUrl(String id) {
         // TODO: replace when available
-        return this.chefRoot + "/api/" + id;
+        return this.chefRoot + "/api/chefs/getChef?username=" + id;
     }
 
     private String getSingleParamFromRequest(String url, String paramPath) {

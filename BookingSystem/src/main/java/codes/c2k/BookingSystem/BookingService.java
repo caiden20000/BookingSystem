@@ -20,6 +20,14 @@ public class BookingService {
     }
 
     public void saveBooking(Booking booking) {
+        // Retrieve the names from external API if not yet set.
+        if (booking.getEmployerName() == null) {
+            booking.setEmployerName(nameResolver.getName(booking.getEmployerId(), "employer"));
+        }
+
+        if (booking.getChefName() == null) {
+            booking.setChefName(nameResolver.getName(booking.getChefId(), "chef"));
+        }
         repository.save(booking);
     }
 

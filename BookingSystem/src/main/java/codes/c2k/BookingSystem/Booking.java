@@ -34,8 +34,8 @@ public class Booking {
     private String employerId;
     private String chefId;
 
-    private String employerName = "DEFAULT_EMPLOYER_NAME";
-    private String chefName = "DEFAULT_CHEF_NAME";
+    private String employerName;
+    private String chefName;
     
     @Setter // ONLY use setter when initializing!!
     @ElementCollection

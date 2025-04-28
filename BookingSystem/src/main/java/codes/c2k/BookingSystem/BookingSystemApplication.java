@@ -24,7 +24,7 @@ public class BookingSystemApplication {
 	public Server inMemoryH2DatabaseaServer() throws SQLException {
 		log.info(">> Starting H2 Server...");
 		return Server.createTcpServer(
-		"-tcp", "-tcpAllowOthers", "-tcpPort", "9090");
+		"-tcp", "-tcpAllowOthers", "-tcpPort", "60606");
 	}
 
 	@Bean
