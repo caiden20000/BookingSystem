@@ -52,10 +52,14 @@ public class NameResolverService {
 
     private String getChefNameFromId(String id) {
         // TODO: Change paramPath when final information is confirmed
-        // return getSingleParamFromRequest(getFullChefUrl(id), "/details/name");
+        StringBuilder fullName = new StringBuilder();
+        fullName.append(getSingleParamFromRequest(getFullChefUrl(id), "/firstName"));
+        fullName.append(" ");
+        fullName.append(getSingleParamFromRequest(getFullChefUrl(id), "/lastName"));
+        return fullName.toString();
 
         // PLACEHOLDER!
-        return "Mr. Chef " + id;
+        // return "Mr. Chef " + id;
     }
 
     public String getName(String id, String idType) {
